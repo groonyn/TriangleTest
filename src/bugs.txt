@@ -1,0 +1,4 @@
+//Bugs:
+//- can add triangle with zero sides, can add triagle with negative side (autocorrection)
+// - inpossible by existence triangle: first time you cannot add it with 2 3 5, second time you can add it with code 200
+// - limit of triangles is 11 and not 10
