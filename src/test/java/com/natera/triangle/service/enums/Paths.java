@@ -1,8 +1,10 @@
 package com.natera.triangle.service.enums;
 
 public enum Paths {
+    ALL("/all"),
+    AREA("/area"),
     NATERA_URI("https://qa-quiz.natera.com/triangle"),
-    ALL("/all");
+    PERIMETER("/perimeter");
 
     public String path;
 

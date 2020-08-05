@@ -1,0 +1,9 @@
+<suite name="Triangle Test Suite" verbose="1">
+    <test name="Triangle Service Test Groups">
+        <classes>
+            <class name="com.natera.triangle.service.HttpCodesTest"/>
+            <class name="com.natera.triangle.service.ManipulationsTest"/>
+            <class name="com.natera.triangle.service.TrianglesTest"/>
+        </classes>
+    </test>
+</suite>

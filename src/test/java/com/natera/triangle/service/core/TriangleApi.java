@@ -1,45 +1,48 @@
-package com.natera.triangle.service;
+package com.natera.triangle.service.core;
 
 import io.restassured.http.ContentType;
 import io.restassured.response.ValidatableResponse;
 import io.restassured.specification.RequestSpecification;
 import org.json.JSONObject;
-import org.junit.Before;
+import org.testng.annotations.BeforeTest;
 
 import java.util.List;
 
 import static com.natera.triangle.service.enums.Parameters.*;
-import static com.natera.triangle.service.enums.Paths.ALL;
-import static com.natera.triangle.service.enums.Paths.NATERA_URI;
+import static com.natera.triangle.service.enums.Paths.*;
 import static io.restassured.RestAssured.given;
 
 public class TriangleApi {
-    @Before
+    @BeforeTest
     public void clear() {
         deleteAllTrianglesById();
     }
 
-    public static RequestSpecification reqSpecification() {
+    public static RequestSpecification reqSpecificationWithParameters(String headerName, String headerValue) {
         return given()
                 .baseUri(NATERA_URI.path)
-                .header(X_USER.value, TOKEN.value).contentType(ContentType.JSON);
+                .header(headerName, headerValue).contentType(ContentType.JSON);
     }
 
-    private static String triangleParameters(int sideA, int sideB, int sideC, String separator) {
-        JSONObject body = new JSONObject();
-        body.put(INPUT.value, sideA + separator + sideB + separator + sideC);
-        if (separator != null) {
-            body.put(SEPARATOR.value, separator);
-        }
-        return body.toString();
+    public static RequestSpecification reqSpecification() {
+        return reqSpecificationWithParameters(X_USER.value, TOKEN.value);
     }
 
     public static ValidatableResponse getAllTriangles() {
-        return reqSpecification().get(ALL.path).prettyPeek().then().log().all();
+        return reqSpecification().get(ALL.path).then().log().all();
     }
 
     public static ValidatableResponse getTriangleById(String id) {
-        return reqSpecification().get("/" + id).prettyPeek().then().log().all();
+        return reqSpecification().get("/" + id).then().log().all();
+    }
+
+    public static ValidatableResponse getTrianglePerimeterById(String id) {
+        return reqSpecification().get("/" + id + PERIMETER.path).then().log().all();
+    }
+
+    public static ValidatableResponse getTriangleAreaById(String id) {
+
+        return reqSpecification().get("/" + id + AREA.path).then().log().all();
     }
 
     public static String getTriangleValue(ValidatableResponse response, String key) {
@@ -47,22 +50,22 @@ public class TriangleApi {
         return triangleValue;
     }
 
-    public static List<String> getAllTriangleValues(ValidatableResponse response, String key) {
-        List<String> triangleIds = response
-                .extract()
-                .jsonPath()
-                .getList(key);
-        return triangleIds;
-    }
-
     public static ValidatableResponse addTriangle(int sideA, int sideB, int sideC, String separator) {
         return reqSpecification()
                 .body(triangleParameters(sideA, sideB, sideC, separator))
                 .post()
-                .prettyPeek()
                 .then()
                 .log()
                 .all();
+    }
+
+    private static String triangleParameters(int sideA, int sideB, int sideC, String separator) {
+        JSONObject body = new JSONObject();
+        body.put(INPUT.value, sideA + SEPARATOR_CHAR.value + sideB + SEPARATOR_CHAR.value + sideC);
+        if (separator != null) {
+            body.put(SEPARATOR.value, separator);
+        }
+        return body.toString();
     }
 
     public static void deleteAllTrianglesById() {
@@ -70,7 +73,6 @@ public class TriangleApi {
         if (values.size() > 0) {
             values.forEach(value -> reqSpecification()
                     .delete(value)
-                    .prettyPeek()
                     .then()
                     .log()
                     .all());
@@ -87,6 +89,14 @@ public class TriangleApi {
             addTriangle(3, 4, 5, ";");
         }
         return addTriangle(3, 4, 5, ";");
+    }
+
+    public static List<String> getAllTriangleValues(ValidatableResponse response, String key) {
+        List<String> triangleIds = response
+                .extract()
+                .jsonPath()
+                .getList(key);
+        return triangleIds;
     }
 }
 

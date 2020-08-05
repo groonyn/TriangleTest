@@ -1,11 +1,11 @@
 package com.natera.triangle.service;
 
-
+import com.natera.triangle.service.core.TriangleApi;
 import io.restassured.response.ValidatableResponse;
 import org.apache.http.HttpStatus;
-import org.junit.Assert;
-import org.junit.Test;
+import org.testng.annotations.Test;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
 
@@ -49,7 +49,7 @@ public class TrianglesTest extends TriangleApi {
     }
 
     @Test
-    public void addImpossbileTriangle() {
+    public void addImpossibleTriangle() {
         ValidatableResponse responseShouldHave = addTriangle(1, 3, 7, ";");
         responseShouldHave
                 .statusCode(HttpStatus.SC_UNPROCESSABLE_ENTITY)
@@ -89,6 +89,6 @@ public class TrianglesTest extends TriangleApi {
         deleteAllTrianglesById();
         addTrianglesUntilLimit(10, 0).statusCode(HttpStatus.SC_OK);
         addTrianglesUntilLimit(10, 1).statusCode(HttpStatus.SC_UNPROCESSABLE_ENTITY);
-        Assert.assertThat(getAllTriangleValues(getAllTriangles(), "id"), hasSize(10));
+        assertThat(getAllTriangleValues(getAllTriangles(), "id"), hasSize(10));
     }
 }
