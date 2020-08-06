@@ -99,4 +99,3 @@ public class TriangleApi {
         return triangleIds;
     }
 }
-
