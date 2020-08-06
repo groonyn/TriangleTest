@@ -39,7 +39,7 @@ public class TrianglesTest extends TriangleApi {
     }
 
     @Test
-    public void addTriangleIsActuallyLine() {
+    public void addTriangleIsActuallyLineTest() {
         ValidatableResponse responseShouldHave = addTriangle(2, 3, 5, ";");
         responseShouldHave
                 .statusCode(HttpStatus.SC_UNPROCESSABLE_ENTITY)
@@ -49,7 +49,7 @@ public class TrianglesTest extends TriangleApi {
     }
 
     @Test
-    public void addImpossibleTriangle() {
+    public void addImpossibleTriangleTest() {
         ValidatableResponse responseShouldHave = addTriangle(1, 3, 7, ";");
         responseShouldHave
                 .statusCode(HttpStatus.SC_UNPROCESSABLE_ENTITY)
